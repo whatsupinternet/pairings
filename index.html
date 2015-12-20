@@ -3,9 +3,15 @@
 <html>
 
 <head>
+<<<<<<< HEAD
   <title>pairings</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+=======
+  <title>Messenger Pairings</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+>>>>>>> origin/gh-pages
 
   <style>
     * {
@@ -23,6 +29,10 @@
   </style>
 
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="lib/normalize.css">
+  <link rel="stylesheet" href="lib/skeleton.css">
 </head>
 
 
@@ -68,9 +78,13 @@
 
 <script src="lib/jquery.js"></script>
 <script src="lib/underscore.js"></script>
+<<<<<<< HEAD
 <!-- <script src="lib/materialize.js"></script> -->
 <!-- <script src="lib/backbone.js"></script> -->
 <script src="lib/parse.js"></script>
+=======
+<script src="lib/tabletop.js"></script>
+>>>>>>> origin/gh-pages
 
 <script type="text/javascript">
 
@@ -89,6 +103,7 @@
 
 
     function process(data){
+<<<<<<< HEAD
       var templ = _.template( $('#list-template').html() );
       for(var i = 0; i < data.length; i++){   
         $('#pairings').append( 
@@ -102,6 +117,13 @@
               "pairingName" :data[i].get('pairingName')
             } 
           ) 
+=======
+      var templ = _.template( $('#li-template').html() );
+      for(var i = 0; i < data.length; i++){
+        // console.log( $('#pairingsLI').html() );
+        $('#pairingsUL').append(
+          templ(data[i])
+>>>>>>> origin/gh-pages
         );
       }
     }
