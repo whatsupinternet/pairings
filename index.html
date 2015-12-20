@@ -5,12 +5,21 @@
 <head>
   <title>pairings</title>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
 
   <style>
-  * {
-    font-family: sans-serif;
-  }
+    * {
+      font-family: sans-serif;
+    }
+    .pairingColumn{
+      text-align: center;
+    }
+    .pairingName{
+      color:white;
+      width:auto;
+      padding:10px;
+      border-radius: 10px;
+    }
   </style>
 
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
@@ -18,47 +27,81 @@
 
 
 <body>
-  <h1>Pairings</h1>
-  <ul id='pairingsUL'>
-  </ul>
+  <div class="container">
+    <div class='row'> <h1>Pairings</h1> </div>
+    <div class="row">
+      <div class="one-half column">
+        <h6>Tasteful combinations of emoji and color by Benjamin Travers.</h6>
+      </div>
+      <div class="one-half column">
+        <h6>Wanna suggest a pairing? Click here or scroll down.</h6>
+      </div>
+    </div>
+    <div class='row' id='pairings'> </div>
+    <div class='row'>
+      <h5>Suggest a pairing</h5>
+      
+    </div>
+  </div>
 </body>
 
-<script type='text/template' id='li-template'>
-  <p>
-    <%=Color%>
-    <%=Credit%>
-    <%=PairingName%>
-    <%=Emoji%>
-    <%=Timestamp%>
-  </p>
+<script type='text/template' id='list-template'>
+  <div class="six columns pairingColumn" >
+    <p>
+      <div class='pairingName' style='background-color:<%=color%>'><%=pairingName%></div>
+      <div class='row'>
+        <div class='one-third column'>
+          circle
+        </div>
+        <div class='one-third column'>
+          +
+        </div>
+        <div class='one-third column'>
+          <%=emoji%>
+        </div>
+      </div>
+      <%=credit%> <br/>
+      <%=time%>
+    </p>
+  </div>
 </script>
 
 <script src="lib/jquery.js"></script>
 <script src="lib/underscore.js"></script>
-<script src="lib/materialize.js"></script>
-<script src="lib/tabletop.js"></script>
+<!-- <script src="lib/materialize.js"></script> -->
+<!-- <script src="lib/backbone.js"></script> -->
+<script src="lib/parse.js"></script>
 
 <script type="text/javascript">
 
-    window.onload = function() { init() };
-
-    var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1zqEx8Br9636pd3_xh5kaeXc7m7uVnk8PwvqAyAqdEUE/pubhtml';
-
-    function init() {
-      Tabletop.init( { key: public_spreadsheet_url, callback: showInfo, simpleSheet: true } )
-    }
-
-    function showInfo(data, tabletop) {
+  // Parse.initialize("jKtlR44vnXZgnZGR6dfTkBfCFF8Po5b94PIValmH", "9XNCZzZmdEuaTqCs3kBluyt3ttr6WcagFslhAZlL");
+  Parse.initialize("2JRXM2aLFVxzcY0Dnf3QujnJPXrL0JsJSHwyJRum", "b5qBnMZHBFHMBzPu7jnKYJQpyNcaVSgP55dbW4ID");
+  
+  var pairObj = Parse.Object.extend("pairings");
+  var query = new Parse.Query(pairObj);
+  query.find({
+    success: function(data) {
       process(data);
-      console.log(data);
+    },
+    error: function(object, error) {
     }
+  });
+
 
     function process(data){
-      var templ = _.template( $('#li-template').html() );
+      var templ = _.template( $('#list-template').html() );
       for(var i = 0; i < data.length; i++){   
-        // console.log( $('#pairingsLI').html() );     
-        $('#pairingsUL').append(
-          templ(data[i])
+        $('#pairings').append( 
+          templ( 
+            {
+              "color"       :data[i].get('color'),
+              "time"        :data[i].get('createdAt'),
+              "credit"      :data[i].get('credit'),
+              "emoji"       :data[i].get('emoji'),
+              "isApproved"  :data[i].get('isApproved'),
+              "pairingName" :data[i].get('pairingName')
+            } 
+          ) 
         );
       }
     }
